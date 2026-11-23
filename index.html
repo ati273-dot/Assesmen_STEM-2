@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asesmen Pengetahuan STEM COOLBOTTLE – Fungsi Eksponensial (Kelas X)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cool: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar & print styling */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .math-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Smooth transitions */
+    .option-card {
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-card:hover {
+      transform: translateY(-1px);
+    }
+    /* Print stylesheet for exporting grade report */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+      .print-card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cool-200 selection:text-cool-900">
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Brand & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cool-600 to-teal-500 flex items-center justify-center text-white shadow-md shrink-0">
+            <!-- Bottle Thermal Icon SVG -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6m-5 0v2.5L7.5 8v11a2 2 0 002 2h5a2 2 0 002-2V8L14 5.5V3M7.5 13h9" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cool-100 text-cool-800">Proyek STEM • Kelas X</span>
+              <span class="hidden sm:inline-block text-xs font-medium text-slate-500">Matematika: Fungsi Eksponensial</span>
+            </div>
+            <h1 class="text-sm sm:text-base font-bold text-slate-900 leading-tight mt-0.5">Asesmen Pengetahuan COOLBOTTLE</h1>
+          </div>
+        </div>
+
+        <!-- Progress & Timer -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path stroke-linecap="round" d="M12 7v5l3 2"></path>
+            </svg>
+            <span id="timer-display" class="text-xs font-mono font-semibold text-slate-700">00:00</span>
+          </div>
+
+          <div class="flex flex-col items-end">
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+              <span>Progres:</span>
+              <span id="progress-text" class="text-cool-700 font-bold">0 / 12 Soal</span>
+            </div>
+            <div class="w-28 sm:w-36 h-2 bg-slate-200 rounded-full overflow-hidden mt-1">
+              <div id="progress-bar" class="h-full bg-gradient-to-r from-cool-500 to-teal-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Stepper Tabs -->
+      <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pt-3 pb-1 no-scrollbar" aria-label="Navigasi Bagian Asesmen">
+        <button type="button" onclick="switchTab('tab-identitas')" id="nav-tab-identitas" class="nav-pill active-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-cool-600 text-white shadow-sm">
+          <span>1. Identitas & Petunjuk</span>
+        </button>
+        <button type="button" onclick="switchTab('tab-pg')" id="nav-tab-pg" class="nav-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <span>2. PG Kompleks (1–6)</span>
+          <span id="badge-pg" class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/80 text-slate-700">0/6</span>
+        </button>
+        <button type="button" onclick="switchTab('tab-uraian')" id="nav-tab-uraian" class="nav-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <span>3. Uraian & Kotretan (7–12)</span>
+          <span id="badge-uraian" class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/80 text-slate-700">0/6</span>
+        </button>
+        <button type="button" onclick="switchTab('tab-lampiran')" id="nav-tab-lampiran" class="nav-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200">
+          <span>4. Lembar Kotretan</span>
+        </button>
+        <button type="button" onclick="switchTab('tab-hasil')" id="nav-tab-hasil" class="nav-pill hidden shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 bg-emerald-600 text-white shadow-sm">
+          <span>★ Nilai & Pembahasan</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+    <!-- ========================================================= -->
+    <!-- TAB 1: PETUNJUK UMUM & IDENTITAS MURID                    -->
+    <!-- ========================================================= -->
+    <section id="tab-identitas" class="tab-section space-y-6">
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-br from-slate-900 via-cool-900 to-teal-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-cool-200 text-xs font-semibold mb-3">
+            <span>Asesmen Pengetahuan Terpadu</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">PROYEK STEM COOLBOTTLE</h2>
+          <p class="text-cool-100 text-sm sm:text-base mt-2 leading-relaxed">
+            Penerapan <strong>Fungsi Eksponensial (Matematika Kelas X)</strong> dalam memodelkan laju perubahan selisih suhu air dingin terhadap suhu lingkungan pada desain penutup botol isolator termal.
+          </p>
+        </div>
+        <!-- Decorative Thermal Rings SVG -->
+        <svg class="hidden sm:block absolute right-6 top-1/2 -translate-y-1/2 w-44 h-44 text-cool-400/20" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="85" stroke="currentColor" stroke-width="2" stroke-dasharray="6 6" />
+          <circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="3" />
+          <circle cx="100" cy="100" r="35" fill="currentColor" />
+        </svg>
+      </div>
+
+      <!-- Petunjuk Umum Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Petunjuk Umum</h3>
+        </div>
+        <ol class="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700 leading-relaxed">
+          <li>Tuliskan identitas dengan lengkap sebelum mengerjakan.</li>
+          <li>Bacalah stimulus dan setiap pernyataan dengan cermat.</li>
+          <li>Bagian <strong>pilihan ganda kompleks</strong> dapat memiliki <strong>lebih dari satu jawaban benar</strong>. Beri tanda centang pada semua pilihan yang benar.</li>
+          <li>Tuliskan proses berpikir dan perhitungan pada ruang kotretan yang disediakan atau pada lembar terpisah.</li>
+          <li>Gunakan satuan yang tepat dan nyatakan kesimpulan berdasarkan data.</li>
+        </ol>
+      </div>
+
+      <!-- Bagian 1. Identitas Murid -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-cool-600">Bagian 1</span>
+            <h3 class="text-lg font-bold text-slate-900">Identitas Murid</h3>
+          </div>
+          <span class="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">Wajib diisi</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <div>
+            <label for="input-nama" class="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap <span class="text-rose-500">*</span></label>
+            <input type="text" id="input-nama" placeholder="Contoh: Raka Pratama Wijaya" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-cool-500 transition" />
+          </div>
+
+          <div>
+            <label for="input-kelas" class="block text-sm font-semibold text-slate-700 mb-1.5">Kelas <span class="text-rose-500">*</span></label>
+            <input type="text" id="input-kelas" placeholder="Contoh: X-IPA 2 / X-4" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-cool-500 transition" />
+          </div>
+
+          <div>
+            <label for="input-absen" class="block text-sm font-semibold text-slate-700 mb-1.5">Nomor Absen <span class="text-rose-500">*</span></label>
+            <input type="text" id="input-absen" placeholder="Contoh: 18" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-cool-500 transition" />
+          </div>
+
+          <div>
+            <label for="input-tanggal" class="block text-sm font-semibold text-slate-700 mb-1.5">Tanggal Pengerjaan <span class="text-rose-500">*</span></label>
+            <input type="date" id="input-tanggal" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-cool-500 focus:border-cool-500 transition" />
+          </div>
+        </div>
+
+        <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <p class="text-xs text-slate-500">Total skor maksimum: <strong>60 poin</strong> (24 poin PG Kompleks + 36 poin Uraian).</p>
+          <button type="button" onclick="validateIdentityAndNext()" class="px-5 py-2.5 rounded-xl bg-cool-600 hover:bg-cool-700 text-white font-semibold text-sm shadow-sm transition flex items-center gap-2">
+            <span>Mulai Bagian 2: Pilihan Ganda Kompleks</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 2: STIMULUS 1 & SOAL PILIHAN GANDA KOMPLEKS (1–6)     -->
+    <!-- ========================================================= -->
+    <section id="tab-pg" class="tab-section hidden space-y-6">
+      <!-- Stimulus 1 Card -->
+      <div class="bg-white rounded-2xl border-2 border-cool-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="px-3 py-1 rounded-full bg-cool-100 text-cool-800 text-xs font-bold uppercase tracking-wider">Stimulus 1 – Menguji Kemampuan COOLBOTTLE</span>
+          <span class="text-xs font-medium text-slate-500">Suhu Lingkungan Tetap = <strong>30°C</strong></span>
+        </div>
+
+        <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-4">
+          Sekelompok murid merancang penutup botol <strong>COOLBOTTLE</strong> agar air dingin di dalam botol lebih lama mendekati suhu lingkungan. Dua prototipe, <strong>A</strong> dan <strong>B</strong>, diuji pada kondisi awal dan suhu lingkungan yang sama. Suhu lingkungan selama pengamatan dianggap tetap, yaitu <strong>30°C</strong>. Suhu air dicatat setiap <strong>10 menit</strong> sebagai berikut:
+        </p>
+
+        <!-- Data Table + Visual Illustration -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center my-4">
+          <div class="lg:col-span-7 overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-sm text-left">
+              <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3">Waktu (menit)</th>
+                  <th class="px-4 py-3 text-center">Indeks (<span class="math-font">n</span>)</th>
+                  <th class="px-4 py-3 text-center text-amber-700">Suhu Air Prototipe A (°C)</th>
+                  <th class="px-4 py-3 text-center text-cool-700">Suhu Air Prototipe B (°C)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 math-font text-slate-700">
+                <tr class="bg-white">
+                  <td class="px-4 py-2.5 font-semibold">0</td>
+                  <td class="px-4 py-2.5 text-center text-slate-500">0</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">10</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">10</td>
+                </tr>
+                <tr class="bg-slate-50/70">
+                  <td class="px-4 py-2.5 font-semibold">10</td>
+                  <td class="px-4 py-2.5 text-center text-slate-500">1</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">14</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">12</td>
+                </tr>
+                <tr class="bg-white">
+                  <td class="px-4 py-2.5 font-semibold">20</td>
+                  <td class="px-4 py-2.5 text-center text-slate-500">2</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">17,2</td>
+                  <td class="px-4 py-2.5 text-center font-semibold">13,6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Visual SVG Diagram of Prototype A vs B -->
+          <div class="lg:col-span-5 bg-gradient-to-br from-cool-50 to-slate-50 rounded-xl border border-cool-100 p-4 flex flex-col items-center justify-center">
+            <svg viewBox="0 0 280 120" class="w-full max-w-[260px] h-auto">
+              <!-- Ambient Box -->
+              <rect x="4" y="4" width="272" height="112" rx="12" fill="none" stroke="#bae6fd" stroke-dasharray="4 4" />
+              <text x="140" y="20" text-anchor="middle" font-size="10" font-weight="700" fill="#0369a1">Suhu Lingkungan = 30°C</text>
+
+              <!-- Prototype A -->
+              <g transform="translate(42, 30)">
+                <rect x="12" y="0" width="24" height="10" rx="3" fill="#f59e0b" />
+                <rect x="4" y="10" width="40" height="58" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+                <rect x="8" y="30" width="32" height="34" rx="4" fill="#38bdf8" opacity="0.65" />
+                <text x="24" y="51" text-anchor="middle" font-size="9" font-weight="700" fill="#0f172a">17,2°C</text>
+                <text x="24" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309">Prototipe A</text>
+              </g>
+
+              <!-- Heat arrows -->
+              <path d="M115 55 L100 55 M104 51 L99 55 L104 59" stroke="#f59e0b" stroke-width="1.8" fill="none" />
+              <text x="140" y="58" text-anchor="middle" font-size="9" fill="#64748b">t = 20 mnt</text>
+              <path d="M165 55 L180 55 M176 51 L181 55 L176 59" stroke="#0284c7" stroke-width="1.8" fill="none" />
+
+              <!-- Prototype B -->
+              <g transform="translate(190, 30)">
+                <rect x="10" y="0" width="28" height="10" rx="3" fill="#0284c7" />
+                <rect x="2" y="10" width="44" height="58" rx="9" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.5" />
+                <rect x="7" y="30" width="34" height="34" rx="4" fill="#0284c7" opacity="0.75" />
+                <text x="24" y="51" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">13,6°C</text>
+                <text x="24" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#0369a1">Prototipe B</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Formula Callout -->
+        <div class="bg-cool-50 border border-cool-200 rounded-xl p-3.5 text-sm text-cool-950 flex flex-col sm:flex-row sm:items-center gap-2">
+          <span class="font-bold text-cool-800 shrink-0">Definisi Variabel:</span>
+          <span>
+            Gunakan selisih suhu <code class="math-font font-bold bg-white px-2 py-0.5 rounded border border-cool-200">D(n) = suhu lingkungan − suhu air</code>. Indeks <code class="math-font font-bold">n</code> menyatakan banyaknya interval pengamatan 10 menit, sehingga <code class="math-font font-bold">n = 0, 1, 2, ...</code>
+          </span>
+        </div>
+      </div>
+
+      <!-- Bagian 2 Header -->
+      <div class="flex flex-wrap items-center justify-between gap-2 px-1">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cool-600">Bagian 2 (Skor Maksimum: 24 Poin)</span>
+          <h3 class="text-lg font-bold text-slate-900">Soal Pilihan Ganda Kompleks (Nomor 1–6)</h3>
+          <p class="text-xs sm:text-sm text-slate-600">Pilih <strong>semua jawaban yang benar</strong> (centang lebih dari satu kotak pada setiap nomor).</p>
+        </div>
+      </div>
+
+      <!-- Container for Questions 1–6 rendered via JS -->
+      <div id="pg-questions-container" class="space-y-5"></div>
+
+      <!-- Navigation Footer -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <button type="button" onclick="switchTab('tab-identitas')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition">
+          ← Kembali ke Identitas
+        </button>
+        <button type="button" onclick="switchTab('tab-uraian')" class="px-5 py-2.5 rounded-xl bg-cool-600 hover:bg-cool-700 text-white font-semibold text-sm shadow-sm transition flex items-center gap-2">
+          <span>Lanjut ke Bagian 3: Uraian & Kotretan</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 3: URAIAN DAN KOTRETAN PENGERJAAN (7–12)              -->
+    <!-- ========================================================= -->
+    <section id="tab-uraian" class="tab-section hidden space-y-6">
+      <!-- Compact Sticky-friendly Stimulus Reference Bar -->
+      <details class="bg-cool-50 border border-cool-200 rounded-2xl p-4 shadow-sm group" open>
+        <summary class="font-bold text-sm text-cool-900 cursor-pointer flex items-center justify-between list-none">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cool-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Referensi Data Stimulus COOLBOTTLE (Suhu Lingkungan = 30°C)
+          </span>
+          <span class="text-xs font-medium text-cool-700 underline">Sembunyikan / Tampilkan</span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-cool-200/70 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs math-font text-slate-800">
+          <div class="bg-white p-2.5 rounded-xl border border-cool-100">
+            <div class="font-bold text-cool-700">n = 0 (t = 0 menit)</div>
+            <div>Suhu A = 10°C | Suhu B = 10°C</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-cool-100">
+            <div class="font-bold text-cool-700">n = 1 (t = 10 menit)</div>
+            <div>Suhu A = 14°C | Suhu B = 12°C</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-cool-100">
+            <div class="font-bold text-cool-700">n = 2 (t = 20 menit)</div>
+            <div>Suhu A = 17,2°C | Suhu B = 13,6°C</div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Bagian 3 Header -->
+      <div class="px-1">
+        <span class="text-xs font-bold uppercase tracking-wider text-cool-600">Bagian 3 (Skor Maksimum: 36 Poin)</span>
+        <h3 class="text-lg font-bold text-slate-900">Uraian dan Kotretan Pengerjaan (Nomor 7–12)</h3>
+        <p class="text-xs sm:text-sm text-slate-600">Kerjakan secara runtut. Sertakan rumus, substitusi nilai, perhitungan, dan alasan pada setiap jawaban.</p>
+      </div>
+
+      <!-- Question 7 (With Structured Table Input + Scratchpad) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-cool-600 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">7</span>
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Aspek: Perhitungan Data (Maks. 6 Poin)</span>
+              <p class="text-sm sm:text-base font-semibold text-slate-900 mt-0.5">
+                Hitung selisih suhu <span class="math-font">D(n)</span> untuk prototipe A dan B pada setiap waktu pengamatan. Sajikan hasilnya dalam tabel.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Table Builder for D(n) -->
+        <div class="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50/50 p-3">
+          <div class="text-xs font-semibold text-slate-600 mb-2">Isi Tabel Hasil Perhitungan <span class="math-font">D(n) = 30 − Suhu Air</span> (°C):</div>
+          <table class="w-full text-sm text-left bg-white rounded-lg overflow-hidden border border-slate-200">
+            <thead class="bg-slate-100 text-slate-700 text-xs uppercase">
+              <tr>
+                <th class="px-3 py-2.5">Waktu (menit)</th>
+                <th class="px-3 py-2.5 text-center">Indeks (<span class="math-font">n</span>)</th>
+                <th class="px-3 py-2.5 text-center">Selisih Suhu <span class="math-font">D<sub>A</sub>(n)</span> (°C)</th>
+                <th class="px-3 py-2.5 text-center">Selisih Suhu <span class="math-font">D<sub>B</sub>(n)</span> (°C)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 math-font">
+              <tr>
+                <td class="px-3 py-2 font-semibold">0</td>
+                <td class="px-3 py-2 text-center">0</td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-da0" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-db0" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">10</td>
+                <td class="px-3 py-2 text-center">1</td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-da1" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-db1" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-semibold">20</td>
+                <td class="px-3 py-2 text-center">2</td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-da2" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <input type="text" id="q7-db2" oninput="updateProgress()" placeholder="... °C" class="w-24 text-center px-2 py-1.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <label for="q7-text" class="block text-xs font-semibold text-slate-600 mb-1.5">Langkah Perhitungan & Kotretan Nomor 7:</label>
+          <textarea id="q7-text" rows="3" oninput="updateProgress()" placeholder="Tuliskan langkah perhitungan D(n) = suhu lingkungan - suhu air untuk setiap interval..." class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Questions 8–12 Rendered cleanly with Math Symbol Toolbar -->
+      <div id="uraian-8-12-container" class="space-y-5"></div>
+
+      <!-- Navigation Footer -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <button type="button" onclick="switchTab('tab-pg')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition">
+          ← Kembali ke PG Kompleks
+        </button>
+        <button type="button" onclick="switchTab('tab-lampiran')" class="px-5 py-2.5 rounded-xl bg-cool-600 hover:bg-cool-700 text-white font-semibold text-sm shadow-sm transition flex items-center gap-2">
+          <span>Lanjut ke Bagian 4: Lembar Kotretan</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 4: BAGIAN 4 - UNGGAH / LAMPIRKAN LEMBAR KOTRETAN      -->
+    <!-- ========================================================= -->
+    <section id="tab-lampiran" class="tab-section hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-cool-600">Bagian 4</span>
+          <h3 class="text-lg font-bold text-slate-900">Unggah atau Lampirkan Lembar Kotretan</h3>
+          <p class="text-sm text-slate-600 mt-1">
+            Lampirkan foto/scan lembar pengerjaan yang terbaca jelas (<strong>JPG / PNG / PDF</strong>) apabila asesmen dilaksanakan secara digital.
+          </p>
+        </div>
+
+        <!-- Checklist of required items in Scratchpad -->
+        <div class="bg-slate-50 rounded-xl border border-slate-200 p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">Pastikan lembar kotretan Anda memuat 6 poin berikut (Centang untuk konfirmasi):</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm text-slate-700">
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Tabel perhitungan selisih suhu <span class="math-font">D(n)</span> untuk prototipe A dan B.</span>
+            </label>
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Perhitungan faktor pengali <span class="math-font">b</span> pada setiap interval.</span>
+            </label>
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Pembentukan model fungsi eksponensial masing-masing prototipe.</span>
+            </label>
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Perhitungan prediksi pada <span class="math-font">n = 3</span>.</span>
+            </label>
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Sketsa grafik atau grafik fungsi <span class="math-font">D(n)</span> dan interpretasinya.</span>
+            </label>
+            <label class="flex items-start gap-2.5 cursor-pointer bg-white p-2.5 rounded-lg border border-slate-200 hover:border-cool-400">
+              <input type="checkbox" class="mt-0.5 rounded text-cool-600 focus:ring-cool-500" />
+              <span>Kesimpulan pemilihan prototipe disertai alasan matematis dan konsep fisika.</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- File Upload Dropzone -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-cool-500 rounded-2xl p-6 text-center transition bg-slate-50/50 cursor-pointer" onclick="document.getElementById('file-kotretan').click()">
+          <input type="file" id="file-kotretan" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="handleFileUpload(event)" />
+          <div class="w-12 h-12 rounded-2xl bg-cool-100 text-cool-700 mx-auto flex items-center justify-center mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-800">Klik untuk memilih file atau seret lembar kotretan ke sini</p>
+          <p class="text-xs text-slate-500 mt-1">Format yang didukung: JPG, PNG, atau PDF (Opsional jika dikerjakan langsung di kolom uraian)</p>
+        </div>
+
+        <!-- Preview Container -->
+        <div id="file-preview-box" class="hidden bg-cool-50 border border-cool-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <img id="file-thumb" src="" alt="Pratinjau Kotretan" class="hidden w-16 h-16 object-cover rounded-lg border border-slate-300 shrink-0" />
+            <div id="pdf-badge" class="hidden w-16 h-16 rounded-lg bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center shrink-0">PDF</div>
+            <div class="truncate">
+              <div id="file-name" class="text-sm font-bold text-slate-900 truncate"></div>
+              <div id="file-size" class="text-xs text-slate-500"></div>
+            </div>
+          </div>
+          <button type="button" onclick="removeUploadedFile()" class="px-3 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-semibold shrink-0">
+            Hapus Lampiran
+          </button>
+        </div>
+
+        <!-- Submit Action Bar -->
+        <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <button type="button" onclick="switchTab('tab-uraian')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm transition">
+            ← Kembali ke Bagian 3
+          </button>
+          <button type="button" onclick="confirmSubmitAssessment()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm sm:text-base shadow-md transition flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Selesai & Hitung Nilai Akhir</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- TAB 5: HASIL PENILAIAN, RUBRIK GURU & GRAFIK MODEL        -->
+    <!-- ========================================================= -->
+    <section id="tab-hasil" class="tab-section hidden space-y-6">
+      <!-- Top Score Summary Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-md print-card">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">Hasil Asesmen Pengetahuan STEM</span>
+            <h2 class="text-2xl font-extrabold text-slate-900 mt-2">PROYEK COOLBOTTLE – Fungsi Eksponensial</h2>
+            <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2 text-xs sm:text-sm text-slate-600">
+              <div><span class="text-slate-400 block">Nama Murid:</span><strong id="res-nama" class="text-slate-900">-</strong></div>
+              <div><span class="text-slate-400 block">Kelas:</span><strong id="res-kelas" class="text-slate-900">-</strong></div>
+              <div><span class="text-slate-400 block">No. Absen:</span><strong id="res-absen" class="text-slate-900">-</strong></div>
+              <div><span class="text-slate-400 block">Tanggal / Durasi:</span><strong id="res-tanggal" class="text-slate-900">-</strong></div>
+            </div>
+          </div>
+
+          <!-- Big Final Grade Box -->
+          <div class="bg-gradient-to-br from-cool-900 to-slate-900 text-white rounded-2xl p-5 sm:p-6 text-center min-w-[210px] shadow-lg shrink-0">
+            <div class="text-xs uppercase tracking-wider text-cool-200 font-semibold">Nilai Akhir</div>
+            <div id="res-nilai-akhir" class="text-4xl sm:text-5xl font-extrabold my-1 math-font text-emerald-400">0</div>
+            <div id="res-predikat" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/15 text-white mb-2">-</div>
+            <div class="text-[11px] text-cool-200 math-font border-t border-white/15 pt-2">
+              Skor: <span id="res-total-skor" class="font-bold text-white">0</span> / 60 poin
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500">Bagian 2: PG Kompleks (No. 1–6)</div>
+            <div class="text-2xl font-extrabold text-cool-700 mt-1 math-font"><span id="res-skor-pg">0</span> <span class="text-sm font-normal text-slate-500">/ 24 poin</span></div>
+            <div class="text-[11px] text-slate-500 mt-1">Maks. 4 poin per soal (skor penuh jika tepat semua)</div>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500">Bagian 3: Uraian STEM (No. 7–12)</div>
+            <div class="text-2xl font-extrabold text-teal-700 mt-1 math-font"><span id="res-skor-uraian">0</span> <span class="text-sm font-normal text-slate-500">/ 36 poin</span></div>
+            <div class="text-[11px] text-slate-500 mt-1">6 aspek rubrik × 0–6 poin per aspek</div>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-xs font-semibold text-slate-500">Rumus Ketentuan Penilaian</div>
+            <div class="text-sm font-bold text-slate-800 mt-2 math-font bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
+              (<span id="res-formula-skor">0</span> ÷ 60) × 100 = <span id="res-formula-nilai" class="text-emerald-700">0</span>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-1">Sesuai Pedoman Penskoran Guru</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 no-print">
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold flex items-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              <span>Cetak / Simpan PDF Hasil</span>
+            </button>
+            <button type="button" onclick="copyResultSummary()" class="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>Salin Rekap Nilai</span>
+            </button>
+          </div>
+          <button type="button" onclick="switchTab('tab-pg')" class="text-xs font-semibold text-cool-700 hover:underline">
+            ← Tinjau Kembali Lembar Jawaban
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Exponential Decay Graph Visualization -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm print-card">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-cool-600">Visualisasi Model Matematika</span>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900">Grafik Fungsi Eksponensial Peluruhan Selisih Suhu <span class="math-font">D(n) = D₀ · bⁿ</span></h3>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-semibold">
+            <span class="flex items-center gap-1.5 text-amber-700"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Prototipe A: 20 × (0,8)ⁿ</span>
+            <span class="flex items-center gap-1.5 text-cool-700"><span class="w-3 h-3 rounded-full bg-cool-600 inline-block"></span> Prototipe B: 20 × (0,9)ⁿ</span>
+          </div>
+        </div>
+        <div class="w-full overflow-x-auto">
+          <div id="decay-chart-container" class="min-w-[500px]"></div>
+        </div>
+        <p class="text-xs text-slate-600 mt-3 leading-relaxed">
+          <strong>Interpretasi Grafik:</strong> Karena <span class="math-font">0 &lt; b &lt; 1</span>, kedua kurva menunjukkan tren eksponensial menurun. Nilai <span class="math-font">b</span> Prototipe B (<span class="math-font">≈ 0,9</span>) lebih mendekati 1 dibandingkan Prototipe A (<span class="math-font">0,8</span>), sehingga kurva Prototipe B melandai lebih lambat—artinya selisih suhu terhadap lingkungan terjaga lebih lama dan air tetap lebih dingin.
+        </p>
+      </div>
+
+      <!-- Detailed Review: Bagian 2 (PG Kompleks) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4 print-card">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base sm:text-lg font-bold text-slate-900">Rincian Skor & Kunci Jawaban Bagian 2 (PG Kompleks)</h3>
+          <span class="text-xs font-semibold text-slate-500">Maksimum 24 Poin</span>
+        </div>
+        <div id="res-pg-breakdown" class="space-y-3"></div>
+      </div>
+
+      <!-- Detailed Review & Teacher Rubric Panel: Bagian 3 (Uraian) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900">Pedoman Penskoran & Rubrik Uraian (Nomor 7–12)</h3>
+            <p class="text-xs text-slate-600">Sistem mengevaluasi jawaban secara otomatis berdasarkan kata kunci & perhitungan rubrik. Guru dapat menyesuaikan skor tiap aspek (0–6 poin) secara langsung.</p>
+          </div>
+          <span class="text-xs font-semibold text-slate-500">Maksimum 36 Poin</span>
+        </div>
+        <div id="res-uraian-breakdown" class="space-y-4"></div>
+      </div>
+
+      <!-- Teacher Note Footer -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs sm:text-sm text-amber-950">
+        <strong>Catatan Guru:</strong> Data pada stimulus merupakan data simulasi untuk keperluan asesmen. Dalam eksperimen nyata, suhu lingkungan dan hasil pengukuran dapat berubah; model <span class="math-font font-semibold">D(n) = D₀bⁿ</span> merupakan pendekatan ketika kondisi pengamatan relatif sebanding.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Custom Confirmation Modal (Replaces window.confirm) -->
+  <div id="submit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-cool-100 text-cool-700 flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-lg font-bold text-slate-900">Selesaikan Asesmen?</h4>
+          <p class="text-xs text-slate-500">Periksa kelengkapan jawaban sebelum melihat nilai akhir.</p>
+        </div>
+      </div>
+      <div id="modal-summary-text" class="text-sm text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200 leading-relaxed"></div>
+      <div class="flex items-center justify-end gap-2.5 pt-2">
+        <button type="button" onclick="closeSubmitModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">
+          Periksa Lagi
+        </button>
+        <button type="button" onclick="finalizeAndGrade()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm">
+          Ya, Hitung Nilai Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Toast Notification (Replaces window.alert) -->
+  <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300">
+    <div id="toast-content" class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2.5 border border-slate-700">
+      <span id="toast-message">Pesan notifikasi</span>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // DATA SOAL & KUNCI JAWABAN (SESUAI DOKUMEN ASESMEN STEM COOLBOTTLE)
+    // =========================================================================
+
+    const pgQuestions = [
+      {
+        id: 1,
+        question: "Pernyataan yang tepat tentang model matematika fungsi eksponensial untuk selisih suhu adalah …",
+        options: [
+          { key: "A", text: "Bentuk umumnya D(n) = D₀ × bⁿ." },
+          { key: "B", text: "D₀ menyatakan selisih suhu pada saat awal pengamatan." },
+          { key: "C", text: "Nilai b pada model pendinginan ini lebih besar dari 1." },
+          { key: "D", text: "Untuk model eksponensial menurun, nilai b berada di antara 0 dan 1." },
+          { key: "E", text: "Variabel n menyatakan suhu air dalam derajat Celsius." }
+        ],
+        correct: ["A", "B", "D"],
+        explanation: "Model eksponensial peluruhan selisih suhu berbentuk D(n) = D₀ × bⁿ dengan D₀ adalah selisih suhu awal (n = 0), 0 < b < 1 karena selisih suhu menurun mendekati nol, dan n menyatakan banyaknya interval pengamatan 10 menit."
+      },
+      {
+        id: 2,
+        question: "Berdasarkan data prototipe A, pernyataan yang benar adalah …",
+        options: [
+          { key: "A", text: "D(0) = 20°C." },
+          { key: "B", text: "D(1) = 16°C." },
+          { key: "C", text: "D(2) = 12,8°C." },
+          { key: "D", text: "Faktor pengali b dapat diperkirakan sebesar 0,8." },
+          { key: "E", text: "Selisih suhu bertambah pada setiap interval pengamatan." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        explanation: "Untuk Prototipe A: D(0) = 30 − 10 = 20°C; D(1) = 30 − 14 = 16°C; D(2) = 30 − 17,2 = 12,8°C. Rasio b = 16/20 = 0,8 dan 12,8/16 = 0,8. Selisih suhu semakin berkurang."
+      },
+      {
+        id: 3,
+        question: "Berdasarkan data prototipe B, pernyataan yang benar adalah …",
+        options: [
+          { key: "A", text: "D(0) = 20°C." },
+          { key: "B", text: "D(1) = 18°C." },
+          { key: "C", text: "D(2) = 16,4°C." },
+          { key: "D", text: "Faktor pengali b dapat diperkirakan sebesar 0,9." },
+          { key: "E", text: "Nilai b prototipe B lebih kecil daripada nilai b prototipe A." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        explanation: "Untuk Prototipe B: D(0) = 30 − 10 = 20°C; D(1) = 30 − 12 = 18°C; D(2) = 30 − 13,6 = 16,4°C. Rasio b = 18/20 = 0,9 dan 16,4/18 ≈ 0,91 (diperkirakan sekitar 0,9, lebih besar dari 0,8 milik prototipe A)."
+      },
+      {
+        id: 4,
+        question: "Kesimpulan yang tepat dari perbandingan kedua prototipe adalah …",
+        options: [
+          { key: "A", text: "Prototipe A memiliki faktor pengali selisih suhu sekitar 0,8." },
+          { key: "B", text: "Prototipe B memiliki faktor pengali selisih suhu sekitar 0,9." },
+          { key: "C", text: "Prototipe B lebih lambat mengalami penurunan selisih suhu." },
+          { key: "D", text: "Dengan kondisi awal dan interval pengamatan yang sama, prototipe B menunjukkan kemampuan mempertahankan perbedaan suhu lebih baik." },
+          { key: "E", text: "Prototipe A pasti lebih baik karena suhu airnya lebih tinggi pada menit ke-20." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        explanation: "Prototipe B memiliki faktor pengali b ≈ 0,9 (> 0,8 pada A), sehingga selisih suhu terhadap lingkungan turun lebih lambat dan air dingin lebih lama terjaga suhunya."
+      },
+      {
+        id: 5,
+        question: "Pernyataan yang tepat tentang representasi grafik dan interpretasi model adalah …",
+        options: [
+          { key: "A", text: "Grafik D(n) untuk 0 < b < 1 menunjukkan tren menurun." },
+          { key: "B", text: "Grafik fungsi eksponensial menurun harus berupa garis lurus." },
+          { key: "C", text: "Jika b semakin mendekati 1, selisih suhu menurun semakin lambat." },
+          { key: "D", text: "Jika b semakin mendekati 0, selisih suhu menurun semakin lambat." },
+          { key: "E", text: "Model eksponensial dapat digunakan untuk memperkirakan selisih suhu pada interval berikutnya dalam kondisi pengujian yang sebanding." }
+        ],
+        correct: ["A", "C", "E"],
+        explanation: "Grafik eksponensial 0 < b < 1 berbentuk kurva melengkung menurun (bukan garis lurus). Semakin b mendekati 1, peluruhan semakin lambat, dan model dapat digunakan untuk memprediksi interval berikutnya."
+      },
+      {
+        id: 6,
+        question: "Pernyataan yang tepat terkait keterpaduan STEM pada proyek COOLBOTTLE adalah …",
+        options: [
+          { key: "A", text: "Matematika digunakan untuk memodelkan perubahan selisih suhu dengan fungsi eksponensial." },
+          { key: "B", text: "Fisika membantu menjelaskan perpindahan kalor antara air, botol, dan lingkungan." },
+          { key: "C", text: "Ekonomi digunakan untuk membandingkan biaya bahan dan kelayakan rancangan." },
+          { key: "D", text: "Bahasa Indonesia digunakan untuk menyusun laporan dan mempresentasikan hasil proyek secara runtut." },
+          { key: "E", text: "Keberhasilan proyek hanya ditentukan oleh tampilan luar prototipe." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        explanation: "Proyek COOLBOTTLE mengintegrasikan pemodelan eksponensial (Matematika), konsep perpindahan kalor & isolator (Fisika), analisis biaya-manfaat (Ekonomi), serta komunikasi ilmiah (Bahasa Indonesia)."
+      }
+    ];
+
+    const uraianQuestions8to12 = [
+      {
+        id: 8,
+        aspect: "Faktor pengali",
+        indicator: "Menentukan rasio b dan menjelaskan konsistensi hasil.",
+        question: "Tentukan perkiraan faktor pengali b untuk prototipe A dan B dengan menggunakan perbandingan D(1)/D(0) dan D(2)/D(1). Jelaskan jika hasil perbandingan pada tiap interval sama atau berbeda.",
+        placeholder: "Tuliskan perhitungan rasio D(1)/D(0) dan D(2)/D(1) untuk Prototipe A dan B, lalu jelaskan konsistensi hasilnya...",
+        modelAnswer: "Prototipe A: D(1)/D(0) = 16/20 = 0,8 dan D(2)/D(1) = 12,8/16 = 0,8 (hasil sama/konsisten sebesar 0,8). Prototipe B: D(1)/D(0) = 18/20 = 0,9 dan D(2)/D(1) = 16,4/18 ≈ 0,911 (sedikit berbeda pada desimal kedua, sehingga diperkirakan b ≈ 0,9)."
+      },
+      {
+        id: 9,
+        aspect: "Model eksponensial",
+        indicator: "Menuliskan model D(n) = D₀bⁿ dengan parameter tepat.",
+        question: "Tuliskan model fungsi eksponensial D(n) untuk masing-masing prototipe berdasarkan nilai awal dan perkiraan faktor pengali b.",
+        placeholder: "Tuliskan model D_A(n) = ... dan D_B(n) = ...",
+        modelAnswer: "Dengan selisih suhu awal D₀ = 20°C: Model Prototipe A adalah D_A(n) = 20 × (0,8)ⁿ. Model Prototipe B adalah D_B(n) = 20 × (0,9)ⁿ (atau 20 × (0,905)ⁿ)."
+      },
+      {
+        id: 10,
+        aspect: "Prediksi",
+        indicator: "Menghitung prediksi n=3 dan suhu air dengan benar.",
+        question: "Gunakan model yang diperoleh untuk memperkirakan selisih suhu pada interval pengamatan ke-3 (n = 3). Kemudian perkirakan suhu air pada waktu tersebut jika suhu lingkungan tetap 30°C.",
+        placeholder: "Hitung D(3) dan suhu air pada n = 3 (menit ke-30) untuk Prototipe A dan B...",
+        modelAnswer: "Pada n = 3 (menit ke-30): Prototipe A: D_A(3) = 20 × (0,8)³ = 20 × 0,512 = 10,24°C, sehingga suhu air ≈ 30 − 10,24 = 19,76°C. Prototipe B: D_B(3) = 20 × (0,9)³ = 20 × 0,729 = 14,58°C, sehingga suhu air ≈ 30 − 14,58 = 15,42°C."
+      },
+      {
+        id: 11,
+        aspect: "Interpretasi STEM",
+        indicator: "Membandingkan prototipe dengan alasan matematika dan fisika.",
+        question: "Berdasarkan model dan data, tentukan prototipe yang lebih baik dalam memperlambat perubahan suhu air. Jelaskan alasan matematis dan kaitkan dengan konsep perpindahan kalor.",
+        placeholder: "Tentukan prototipe terbaik, jelaskan dari sisi nilai b (matematika) dan perpindahan kalor/isolator (fisika)...",
+        modelAnswer: "Prototipe B lebih baik. Secara matematis, faktor pengali b prototipe B (≈ 0,9) lebih besar daripada prototipe A (0,8), sehingga peluruhan selisih suhu berlangsung lebih lambat. Secara fisika, penutup botol B berfungsi sebagai isolator termal yang lebih efektif menghambat laju perpindahan kalor (konduksi, konveksi, radiasi) dari lingkungan (30°C) ke air dingin."
+      },
+      {
+        id: 12,
+        aspect: "Pertimbangan ekonomi",
+        indicator: "Mengidentifikasi pertimbangan biaya dan manfaat rancangan.",
+        question: "Sebuah bahan penutup tambahan dapat meningkatkan kinerja prototipe, tetapi menambah biaya produksi. Jelaskan informasi apa saja yang perlu dibandingkan agar kelompok dapat memilih rancangan yang efektif sekaligus ekonomis.",
+        placeholder: "Jelaskan informasi biaya, performa termal, dan kelayakan yang perlu dibandingkan...",
+        modelAnswer: "Informasi yang perlu dibandingkan meliputi: (1) tambahan biaya produksi/harga bahan per unit, (2) besarnya peningkatan kinerja termal (selisih nilai b atau berapa lama suhu air tetap dingin), (3) analisis rasio biaya-manfaat (cost-effectiveness), serta (4) ketersediaan dan ketahanan bahan."
+      }
+    ];
+
+    // =========================================================================
+    // STATE MANAGEMENT
+    // =========================================================================
+    const state = {
+      pgAnswers: { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] },
+      uraianScores: { 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0 },
+      pgScores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 },
+      uploadedFile: null,
+      secondsElapsed: 0,
+      isSubmitted: false
+    };
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Set default date to today
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('input-tanggal');
+      if (dateInput) dateInput.value = today;
+
+      renderPGQuestions();
+      renderUraian8to12();
+      startTimer();
+      updateProgress();
+    });
+
+    function startTimer() {
+      setInterval(() => {
+        if (state.isSubmitted) return;
+        state.secondsElapsed++;
+        const mins = String(Math.floor(state.secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(state.secondsElapsed % 60).padStart(2, '0');
+        document.getElementById('timer-display').textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    // =========================================================================
+    // RENDERING QUESTIONS
+    // =========================================================================
+    function renderPGQuestions() {
+      const container = document.getElementById('pg-questions-container');
+      container.innerHTML = pgQuestions.map(q => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm" id="pg-card-${q.id}">
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-xl bg-cool-600 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">${q.id}</span>
+              <p class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">${q.question}</p>
+            </div>
+            <span class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 shrink-0">4 Poin</span>
+          </div>
+
+          <div class="space-y-2.5 pl-0 sm:pl-11">
+            ${q.options.map(opt => `
+              <label id="opt-label-${q.id}-${opt.key}" class="option-card flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 hover:bg-cool-50/60 hover:border-cool-300 cursor-pointer select-none">
+                <input type="checkbox" value="${opt.key}" onchange="togglePGOption(${q.id}, '${opt.key}', this.checked)" class="mt-0.5 w-4 h-4 rounded text-cool-600 focus:ring-cool-500 border-slate-300" />
+                <span class="font-mono font-bold text-xs px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700 shrink-0">${opt.key}</span>
+                <span class="text-sm text-slate-800 leading-relaxed">${opt.text}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderUraian8to12() {
+      const container = document.getElementById('uraian-8-12-container');
+      const mathSymbols = ['D(n)', 'D₀', 'bⁿ', '×', '≈', '°C', '²', '³'];
+
+      container.innerHTML = uraianQuestions8to12.map(q => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-3.5">
+          <div class="flex items-start gap-3">
+            <span class="w-8 h-8 rounded-xl bg-cool-600 text-white font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">${q.id}</span>
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Aspek: ${q.aspect} (Maks. 6 Poin)</span>
+              <p class="text-sm sm:text-base font-semibold text-slate-900 mt-0.5 leading-snug">${q.question}</p>
+            </div>
+          </div>
+
+          <!-- Quick Math Symbol Helper Buttons -->
+          <div class="flex flex-wrap items-center gap-1.5 pt-1">
+            <span class="text-[11px] font-medium text-slate-400 mr-1">Sisipkan simbol:</span>
+            ${mathSymbols.map(sym => `
+              <button type="button" onclick="insertSymbol('q${q.id}-text', '${sym}')" class="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-cool-100 text-slate-700 hover:text-cool-800 font-mono text-xs border border-slate-200 transition">
+                ${sym}
+              </button>
+            `).join('')}
+          </div>
+
+          <textarea id="q${q.id}-text" rows="4" oninput="updateProgress()" placeholder="${q.placeholder}" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-cool-500 focus:outline-none leading-relaxed"></textarea>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // INTERACTIVE HANDLERS
+    // =========================================================================
+    function togglePGOption(qId, optionKey, isChecked) {
+      const arr = state.pgAnswers[qId];
+      if (isChecked) {
+        if (!arr.includes(optionKey)) arr.push(optionKey);
+      } else {
+        state.pgAnswers[qId] = arr.filter(k => k !== optionKey);
+      }
+
+      // Highlight selected option card
+      const label = document.getElementById(`opt-label-${qId}-${optionKey}`);
+      if (label) {
+        if (isChecked) {
+          label.classList.remove('border-slate-200', 'bg-slate-50/40');
+          label.classList.add('border-cool-500', 'bg-cool-50', 'ring-1', 'ring-cool-500');
+        } else {
+          label.classList.add('border-slate-200', 'bg-slate-50/40');
+          label.classList.remove('border-cool-500', 'bg-cool-50', 'ring-1', 'ring-cool-500');
+        }
+      }
+
+      updateProgress();
+    }
+
+    function insertSymbol(textareaId, symbol) {
+      const el = document.getElementById(textareaId);
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const text = el.value;
+      el.value = text.substring(0, start) + symbol + text.substring(end);
+      el.focus();
+      el.selectionStart = el.selectionEnd = start + symbol.length;
+      updateProgress();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-pill').forEach(btn => {
+        btn.classList.remove('bg-cool-600', 'text-white', 'shadow-sm');
+        if (btn.id !== 'nav-tab-hasil') {
+          btn.classList.add('bg-slate-100', 'text-slate-600');
+        }
+      });
+
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn && tabId !== 'tab-hasil') {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+        activeBtn.classList.add('bg-cool-600', 'text-white', 'shadow-sm');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateIdentityAndNext() {
+      const nama = document.getElementById('input-nama').value.trim();
+      const kelas = document.getElementById('input-kelas').value.trim();
+      if (!nama || !kelas) {
+        showToast('Mohon lengkapi Nama Lengkap dan Kelas terlebih dahulu.');
+      }
+      switchTab('tab-pg');
+    }
+
+    function isQuestion7Answered() {
+      const cells = ['q7-da0', 'q7-db0', 'q7-da1', 'q7-db1', 'q7-da2', 'q7-db2'];
+      const hasCell = cells.some(id => document.getElementById(id).value.trim().length > 0);
+      const hasText = document.getElementById('q7-text').value.trim().length > 0;
+      return hasCell || hasText;
+    }
+
+    function updateProgress() {
+      let pgDone = 0;
+      for (let i = 1; i <= 6; i++) {
+        if (state.pgAnswers[i].length > 0) pgDone++;
+      }
+
+      let uraianDone = 0;
+      if (isQuestion7Answered()) uraianDone++;
+      for (let i = 8; i <= 12; i++) {
+        const val = document.getElementById(`q${i}-text`)?.value.trim() || '';
+        if (val.length > 0) uraianDone++;
+      }
+
+      const totalDone = pgDone + uraianDone;
+      const pct = Math.round((totalDone / 12) * 100);
+
+      document.getElementById('progress-text').textContent = `${totalDone} / 12 Soal`;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+      document.getElementById('badge-pg').textContent = `${pgDone}/6`;
+      document.getElementById('badge-uraian').textContent = `${uraianDone}/6`;
+    }
+
+    // =========================================================================
+    // FILE UPLOAD HANDLER (BAGIAN 4)
+    // =========================================================================
+    function handleFileUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      state.uploadedFile = file;
+      const previewBox = document.getElementById('file-preview-box');
+      const fileName = document.getElementById('file-name');
+      const fileSize = document.getElementById('file-size');
+      const thumb = document.getElementById('file-thumb');
+      const pdfBadge = document.getElementById('pdf-badge');
+
+      fileName.textContent = file.name;
+      fileSize.textContent = `${(file.size / 1024).toFixed(1)} KB • Siap dilampirkan`;
+      previewBox.classList.remove('hidden');
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          thumb.src = e.target.result;
+          thumb.classList.remove('hidden');
+          pdfBadge.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        thumb.classList.add('hidden');
+        pdfBadge.classList.remove('hidden');
+      }
+      showToast('Lembar kotretan berhasil dilampirkan.');
+    }
+
+    function removeUploadedFile() {
+      state.uploadedFile = null;
+      document.getElementById('file-kotretan').value = '';
+      document.getElementById('file-preview-box').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // GRADING ENGINE (SESUAI PEDOMAN PENSKORAN DOKUMEN)
+    // =========================================================================
+    function confirmSubmitAssessment() {
+      const nama = document.getElementById('input-nama').value.trim();
+      if (!nama) {
+        showToast('Mohon isi Nama Lengkap pada Bagian 1 terlebih dahulu.');
+        switchTab('tab-identitas');
+        return;
+      }
+
+      let pgDone = 0;
+      for (let i = 1; i <= 6; i++) if (state.pgAnswers[i].length > 0) pgDone++;
+      let uraianDone = isQuestion7Answered() ? 1 : 0;
+      for (let i = 8; i <= 12; i++) if (document.getElementById(`q${i}-text`).value.trim()) uraianDone++;
+
+      const summary = `
+        <ul class="space-y-1">
+          <li>• <strong>Nama Murid:</strong> ${escapeHtml(nama)}</li>
+          <li>• <strong>Bagian 2 (PG Kompleks):</strong> ${pgDone} dari 6 soal terjawab</li>
+          <li>• <strong>Bagian 3 (Uraian):</strong> ${uraianDone} dari 6 soal terjawab</li>
+          <li>• <strong>Lampiran Kotretan:</strong> ${state.uploadedFile ? escapeHtml(state.uploadedFile.name) : 'Tidak dilampirkan'}</li>
+        </ul>
+      `;
+      document.getElementById('modal-summary-text').innerHTML = summary;
+      const modal = document.getElementById('submit-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSubmitModal() {
+      const modal = document.getElementById('submit-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Score PG Kompleks (Max 4 pts per question, proportional partial scoring)
+    function gradePGQuestion(q) {
+      const selected = state.pgAnswers[q.id];
+      const correct = q.correct;
+      if (selected.length === 0) return 0;
+
+      let rightCount = 0;
+      let wrongCount = 0;
+      selected.forEach(ans => {
+        if (correct.includes(ans)) rightCount++;
+        else wrongCount++;
+      });
+
+      // Exact match -> full 4 points
+      if (rightCount === correct.length && wrongCount === 0) return 4;
+
+      // Proportional partial score: ((right - wrong) / totalCorrect) * 4, clamped >= 0
+      const raw = ((rightCount - wrongCount) / correct.length) * 4;
+      return Math.max(0, Number(raw.toFixed(2)));
+    }
+
+    // Smart Rubric Evaluator for Essay Questions (7-12, 0-6 pts each)
+    function gradeEssayQuestions() {
+      // Question 7: Table D(n) + explanation (0-6 pts)
+      const q7Checks = [
+        { id: 'q7-da0', expected: ['20'] },
+        { id: 'q7-db0', expected: ['20'] },
+        { id: 'q7-da1', expected: ['16'] },
+        { id: 'q7-db1', expected: ['18'] },
+        { id: 'q7-da2', expected: ['12.8', '12,8'] },
+        { id: 'q7-db2', expected: ['16.4', '16,4'] }
+      ];
+      let q7Pts = 0;
+      q7Checks.forEach(item => {
+        const val = document.getElementById(item.id).value.replace(/°c|c|\s/gi, '');
+        if (item.expected.some(exp => val === exp || val.includes(exp))) {
+          q7Pts += 0.75;
+        }
+      });
+      const q7Text = document.getElementById('q7-text').value.toLowerCase();
+      if (q7Text.includes('30') && (q7Text.includes('-') || q7Text.includes('−') || q7Text.includes('selisih'))) {
+        q7Pts += 1.5;
+      } else if (q7Text.trim().length > 10) {
+        q7Pts += 0.75;
+      }
+      state.uraianScores[7] = Math.min(6, Math.round(q7Pts));
+
+      // Question 8: Faktor pengali b (0-6 pts)
+      const q8Text = document.getElementById('q8-text').value.toLowerCase();
+      let q8Pts = 0;
+      if (q8Text.includes('0,8') || q8Text.includes('0.8')) q8Pts += 2;
+      if (q8Text.includes('0,9') || q8Text.includes('0.9') || q8Text.includes('0,91') || q8Text.includes('0.91')) q8Pts += 2;
+      if (q8Text.includes('sama') || q8Text.includes('konstan') || q8Text.includes('konsisten') || q8Text.includes('berbeda') || q8Text.includes('mendekati')) q8Pts += 2;
+      state.uraianScores[8] = Math.min(6, q8Pts);
+
+      // Question 9: Model fungsi eksponensial (0-6 pts)
+      const q9Text = document.getElementById('q9-text').value.toLowerCase();
+      let q9Pts = 0;
+      if (q9Text.includes('20')) q9Pts += 1.5;
+      if ((q9Text.includes('0,8') || q9Text.includes('0.8')) && (q9Text.includes('^') || q9Text.includes('ⁿ') || q9Text.includes('n'))) q9Pts += 2.25;
+      if ((q9Text.includes('0,9') || q9Text.includes('0.9') || q9Text.includes('0,905') || q9Text.includes('0.905')) && (q9Text.includes('^') || q9Text.includes('ⁿ') || q9Text.includes('n'))) q9Pts += 2.25;
+      state.uraianScores[9] = Math.min(6, Math.round(q9Pts));
+
+      // Question 10: Prediksi n=3 (0-6 pts)
+      const q10Text = document.getElementById('q10-text').value.toLowerCase();
+      let q10Pts = 0;
+      if (q10Text.includes('10,24') || q10Text.includes('10.24')) q10Pts += 1.5;
+      if (q10Text.includes('19,76') || q10Text.includes('19.76')) q10Pts += 1.5;
+      if (q10Text.includes('14,58') || q10Text.includes('14.58') || q10Text.includes('14,8') || q10Text.includes('14.8')) q10Pts += 1.5;
+      if (q10Text.includes('15,42') || q10Text.includes('15.42') || q10Text.includes('15,1') || q10Text.includes('15.1') || q10Text.includes('15,2') || q10Text.includes('15.2')) q10Pts += 1.5;
+      state.uraianScores[10] = Math.min(6, Math.round(q10Pts));
+
+      // Question 11: Interpretasi STEM (0-6 pts)
+      const q11Text = document.getElementById('q11-text').value.toLowerCase();
+      let q11Pts = 0;
+      if (q11Text.includes('prototipe b') || q11Text.includes('b lebih baik') || q11Text.includes('memilih b')) q11Pts += 1.5;
+      if (q11Text.includes('0,9') || q11Text.includes('0.9') || q11Text.includes('faktor') || q11Text.includes('lambat') || q11Text.includes('lebih besar')) q11Pts += 2;
+      if (q11Text.includes('kalor') || q11Text.includes('isolator') || q11Text.includes('isolasi') || q11Text.includes('konduksi') || q11Text.includes('konveksi') || q11Text.includes('panas')) q11Pts += 2.5;
+      state.uraianScores[11] = Math.min(6, Math.round(q11Pts));
+
+      // Question 12: Pertimbangan ekonomi (0-6 pts)
+      const q12Text = document.getElementById('q12-text').value.toLowerCase();
+      let q12Pts = 0;
+      if (q12Text.includes('biaya') || q12Text.includes('harga') || q12Text.includes('produksi') || q12Text.includes('ekonomis') || q12Text.includes('modal')) q12Pts += 2;
+      if (q12Text.includes('kinerja') || q12Text.includes('manfaat') || q12Text.includes('efektivitas') || q12Text.includes('suhu') || q12Text.includes('tahan')) q12Pts += 2;
+      if (q12Text.includes('banding') || q12Text.includes('rasio') || q12Text.includes('layak') || q12Text.includes('efisien') || q12Text.includes('sebanding')) q12Pts += 2;
+      state.uraianScores[12] = Math.min(6, Math.round(q12Pts));
+    }
+
+    function finalizeAndGrade() {
+      closeSubmitModal();
+      state.isSubmitted = true;
+
+      // Grade Bagian 2
+      pgQuestions.forEach(q => {
+        state.pgScores[q.id] = gradePGQuestion(q);
+      });
+
+      // Grade Bagian 3
+      gradeEssayQuestions();
+
+      // Populate Student Metadata in Results
+      document.getElementById('res-nama').textContent = document.getElementById('input-nama').value.trim() || '-';
+      document.getElementById('res-kelas').textContent = document.getElementById('input-kelas').value.trim() || '-';
+      document.getElementById('res-absen').textContent = document.getElementById('input-absen').value.trim() || '-';
+      const tgl = document.getElementById('input-tanggal').value || '-';
+      const dur = document.getElementById('timer-display').textContent;
+      document.getElementById('res-tanggal').textContent = `${tgl} (${dur})`;
+
+      // Render Breakdowns & Chart
+      renderPGBreakdown();
+      renderUraianBreakdown();
+      renderDecayChart();
+      recalculateTotalGrade();
+
+      // Show Result Nav Tab & Switch to it
+      const navHasil = document.getElementById('nav-tab-hasil');
+      navHasil.classList.remove('hidden');
+      switchTab('tab-hasil');
+      showToast('Penilaian selesai! Nilai akhir berhasil dihitung.');
+    }
+
+    function recalculateTotalGrade() {
+      const pgTotal = Object.values(state.pgScores).reduce((a, b) => a + b, 0);
+      const uraianTotal = Object.values(state.uraianScores).reduce((a, b) => a + b, 0);
+      const totalSkor = Number((pgTotal + uraianTotal).toFixed(2));
+      const nilaiAkhir = Number(((totalSkor / 60) * 100).toFixed(1));
+
+      document.getElementById('res-skor-pg').textContent = pgTotal;
+      document.getElementById('res-skor-uraian').textContent = uraianTotal;
+      document.getElementById('res-total-skor').textContent = totalSkor;
+      document.getElementById('res-nilai-akhir').textContent = nilaiAkhir;
+      document.getElementById('res-formula-skor').textContent = totalSkor;
+      document.getElementById('res-formula-nilai').textContent = nilaiAkhir;
+
+      // Predikat
+      let predikat = 'Perlu Bimbingan';
+      if (nilaiAkhir >= 90) predikat = 'Sangat Baik (A)';
+      else if (nilaiAkhir >= 80) predikat = 'Baik (B)';
+      else if (nilaiAkhir >= 70) predikat = 'Cukup (C)';
+      document.getElementById('res-predikat').textContent = predikat;
+    }
+
+    function adjustUraianScore(qId, newScore) {
+      state.uraianScores[qId] = Number(newScore);
+      document.getElementById(`rubric-score-badge-${qId}`).textContent = `${newScore} / 6 poin`;
+      recalculateTotalGrade();
+    }
+
+    function renderPGBreakdown() {
+      const container = document.getElementById('res-pg-breakdown');
+      container.innerHTML = pgQuestions.map(q => {
+        const userAns = state.pgAnswers[q.id].sort();
+        const keyAns = q.correct.sort();
+        const score = state.pgScores[q.id];
+        const isPerfect = score === 4;
+
+        return `
+          <div class="p-4 rounded-xl border ${isPerfect ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/30'}">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+              <span class="text-sm font-bold text-slate-900">Soal ${q.id}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold math-font ${isPerfect ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                Skor: ${score} / 4 poin
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 mb-2">${q.question}</p>
+            <div class="flex flex-wrap gap-4 text-xs mb-2">
+              <div><span class="text-slate-500">Jawaban Anda:</span> <strong class="math-font text-slate-900">${userAns.length ? userAns.join(', ') : 'Tidak dijawab'}</strong></div>
+              <div><span class="text-slate-500">Kunci Jawaban:</span> <strong class="math-font text-emerald-700">${keyAns.join(', ')}</strong></div>
+            </div>
+            <p class="text-xs text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200">
+              <strong>Pembahasan:</strong> ${q.explanation}
+            </p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderUraianBreakdown() {
+      const container = document.getElementById('res-uraian-breakdown');
+
+      // Build Q7 data summary
+      const q7UserSummary = `Tabel D_A: [${document.getElementById('q7-da0').value || '-'}, ${document.getElementById('q7-da1').value || '-'}, ${document.getElementById('q7-da2').value || '-'}] | Tabel D_B: [${document.getElementById('q7-db0').value || '-'}, ${document.getElementById('q7-db1').value || '-'}, ${document.getElementById('q7-db2').value || '-'}] — Catatan: ${document.getElementById('q7-text').value || '(Kosong)'}`;
+
+      const allEssays = [
+        {
+          id: 7,
+          aspect: "Perhitungan data",
+          indicator: "Menghitung D(n) dengan benar dan menyajikan tabel lengkap.",
+          userText: q7UserSummary,
+          modelAnswer: "n=0: D_A(0)=20°C, D_B(0)=20°C | n=1: D_A(1)=16°C, D_B(1)=18°C | n=2: D_A(2)=12,8°C, D_B(2)=16,4°C (diperoleh dari D(n) = 30 − suhu air)."
+        },
+        ...uraianQuestions8to12.map(q => ({
+          id: q.id,
+          aspect: q.aspect,
+          indicator: q.indicator,
+          userText: document.getElementById(`q${q.id}-text`).value.trim() || '(Tidak dijawab)',
+          modelAnswer: q.modelAnswer
+        }))
+      ];
+
+      container.innerHTML = allEssays.map(item => {
+        const currentScore = state.uraianScores[item.id];
+        return `
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/40 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="text-sm font-bold text-slate-900">Nomor ${item.id} • Aspek: ${item.aspect}</span>
+                <p class="text-xs text-slate-500">Indikator Rubrik: ${item.indicator}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="rubric-score-badge-${item.id}" class="px-2.5 py-1 rounded-full text-xs font-bold math-font bg-cool-100 text-cool-800">
+                  ${currentScore} / 6 poin
+                </span>
+              </div>
+            </div>
+
+            <div class="text-xs bg-white p-3 rounded-lg border border-slate-200">
+              <div class="font-semibold text-slate-500 mb-1">Jawaban Murid:</div>
+              <div class="text-slate-800 whitespace-pre-line">${escapeHtml(item.userText)}</div>
+            </div>
+
+            <div class="text-xs bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 text-emerald-950">
+              <strong>Acuan Kunci Jawaban:</strong> ${item.modelAnswer}
+            </div>
+
+            <!-- Interactive Teacher Score Adjuster (0-6) -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 no-print">
+              <span class="text-[11px] font-semibold text-slate-500">Penyesuaian Skor Rubrik Guru (0–6 poin):</span>
+              <div class="flex items-center gap-1">
+                ${[0, 1, 2, 3, 4, 5, 6].map(val => `
+                  <button type="button" onclick="adjustUraianScore(${item.id}, ${val})" class="w-7 h-7 rounded-lg text-xs font-bold math-font border transition ${currentScore === val ? 'bg-cool-600 text-white border-cool-600' : 'bg-white text-slate-700 border-slate-300 hover:bg-cool-50'}">
+                    ${val}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // INTERACTIVE SVG GRAPH: EXPONENTIAL DECAY D(n) = 20 * b^n
+    // =========================================================================
+    function renderDecayChart() {
+      const container = document.getElementById('decay-chart-container');
+      const width = 680;
+      const height = 270;
+      const padLeft = 55;
+      const padRight = 30;
+      const padTop = 25;
+      const padBottom = 45;
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      const maxN = 5;
+      const maxD = 22;
+
+      const getX = n => padLeft + (n / maxN) * plotW;
+      const getY = d => padTop + plotH - (d / maxD) * plotH;
+
+      const pointsA = [];
+      const pointsB = [];
+      for (let n = 0; n <= maxN; n++) {
+        const dA = 20 * Math.pow(0.8, n);
+        const dB = 20 * Math.pow(0.9, n);
+        pointsA.push({ n, d: dA, x: getX(n), y: getY(dA) });
+        pointsB.push({ n, d: dB, x: getX(n), y: getY(dB) });
+      }
+
+      const pathA = pointsA.map((p, idx) => `${idx === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+      const pathB = pointsB.map((p, idx) => `${idx === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+
+      let gridLines = '';
+      for (let d = 0; d <= 20; d += 5) {
+        const y = getY(d);
+        gridLines += `
+          <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="4 4" />
+          <text x="${padLeft - 10}" y="${y + 4}" text-anchor="end" font-size="11" fill="#64748b" font-family="JetBrains Mono">${d}°C</text>
+        `;
+      }
+
+      let xLabels = '';
+      for (let n = 0; n <= maxN; n++) {
+        const x = getX(n);
+        xLabels += `
+          <line x1="${x}" y1="${padTop}" x2="${x}" y2="${padTop + plotH}" stroke="#f1f5f9" />
+          <text x="${x}" y="${padTop + plotH + 18}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="JetBrains Mono">n=${n}</text>
+          <text x="${x}" y="${padTop + plotH + 32}" text-anchor="middle" font-size="9.5" fill="#94a3b8">(${n * 10} mnt)</text>
+        `;
+      }
+
+      const dotsA = pointsA.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" />
+        <text x="${p.x}" y="${p.y + 15}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#b45309" font-family="JetBrains Mono">${p.d.toFixed(1)}</text>
+      `).join('');
+
+      const dotsB = pointsB.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#0284c7" stroke="#ffffff" stroke-width="1.5" />
+        <text x="${p.x}" y="${p.y - 8}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0369a1" font-family="JetBrains Mono">${p.d.toFixed(1)}</text>
+      `).join('');
+
+      container.innerHTML = `
+        <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto bg-slate-50/50 rounded-xl border border-slate-200">
+          ${gridLines}
+          ${xLabels}
+          <!-- Axes -->
+          <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + plotH}" stroke="#94a3b8" stroke-width="1.5" />
+          <line x1="${padLeft}" y1="${padTop + plotH}" x2="${width - padRight}" y2="${padTop + plotH}" stroke="#94a3b8" stroke-width="1.5" />
+          <!-- Curves -->
+          <path d="${pathA}" fill="none" stroke="#f59e0b" stroke-width="2.8" />
+          <path d="${pathB}" fill="none" stroke="#0284c7" stroke-width="2.8" />
+          <!-- Data Points -->
+          ${dotsA}
+          ${dotsB}
+        </svg>
+      `;
+    }
+
+    // =========================================================================
+    // UTILITIES (CLIPBOARD COPY, TOAST, ESCAPE HTML)
+    // =========================================================================
+    function copyResultSummary() {
+      const nama = document.getElementById('res-nama').textContent;
+      const kelas = document.getElementById('res-kelas').textContent;
+      const absen = document.getElementById('res-absen').textContent;
+      const pg = document.getElementById('res-skor-pg').textContent;
+      const uraian = document.getElementById('res-skor-uraian').textContent;
+      const total = document.getElementById('res-total-skor').textContent;
+      const nilai = document.getElementById('res-nilai-akhir').textContent;
+
+      const text = `REKAP NILAI ASESMEN STEM COOLBOTTLE (FUNGSI EKSPONENSIAL)\nNama: ${nama}\nKelas: ${kelas} | No. Absen: ${absen}\nSkor PG Kompleks: ${pg} / 24\nSkor Uraian: ${uraian} / 36\nTotal Skor: ${total} / 60\nNilai Akhir: ${nilai}`;
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Rekap nilai berhasil disalin ke papan klip!');
+      } catch (err) {
+        showToast('Gagal menyalin teks.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-message').textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 3200);
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>
